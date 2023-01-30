@@ -54,6 +54,7 @@ import {useWakeLock} from '../components/useWakeLock';
 import SDKEvents from '../utils/SdkEvents';
 import {UserPreferenceProvider} from '../components/useUserPreference';
 import EventsConfigure from '../components/EventsConfigure';
+import Poll from '../components/Poll';
 
 enum RnEncryptionEnum {
   /**
@@ -275,6 +276,7 @@ const VideoCall: React.FC = () => {
                 </DeviceConfigure>
               </RtcConfigure>
             </PropsProvider>
+            <Poll />
           </>
         ) : (
           <View style={style.loader}>

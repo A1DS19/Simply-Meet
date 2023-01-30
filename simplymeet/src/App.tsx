@@ -31,6 +31,7 @@ import {
 } from './components/meeting-info/useMeetingInfo';
 import {SetMeetingInfoProvider} from './components/meeting-info/useSetMeetingInfo';
 import {ShareLinkProvider} from './components/useShareLink';
+import PollProvider from './components/PollContext';
 
 //hook can't be used in the outside react function calls. so directly checking the platform.
 if (Platform.OS === 'ios') {
@@ -88,44 +89,46 @@ const App: React.FC = () => {
   );
 
   return (
-    <AppWrapper>
-      <SetMeetingInfoProvider value={{setMeetingInfo}}>
-        <MeetingInfoProvider value={{...meetingInfo}}>
-          <ShareLinkProvider>
-            <Switch>
-              {/* commented for v1 release */}
-              {/* {RenderCustomRoutes()} */}
-              <Route exact path={'/'}>
-                <Redirect to={'/create'} />
-              </Route>
-              <Route exact path={'/authenticate'}>
-                {shouldAuthenticate ? <OAuth /> : <Redirect to={'/'} />}
-              </Route>
-              <Route path={'/auth-token/:token'}>
-                <StoreToken />
-              </Route>
-              <Route exact path={'/join'}>
-                <Join />
-              </Route>
-              {shouldAuthenticate ? (
-                <PrivateRoute
-                  path={'/create'}
-                  failureRedirectTo={'/authenticate'}>
-                  <Create />
-                </PrivateRoute>
-              ) : (
-                <Route path={'/create'}>
-                  <Create />
+    <PollProvider>
+      <AppWrapper>
+        <SetMeetingInfoProvider value={{setMeetingInfo}}>
+          <MeetingInfoProvider value={{...meetingInfo}}>
+            <ShareLinkProvider>
+              <Switch>
+                {/* commented for v1 release */}
+                {/* {RenderCustomRoutes()} */}
+                <Route exact path={'/'}>
+                  <Redirect to={'/create'} />
                 </Route>
-              )}
-              <Route path={'/:phrase'}>
-                <VideoCall />
-              </Route>
-            </Switch>
-          </ShareLinkProvider>
-        </MeetingInfoProvider>
-      </SetMeetingInfoProvider>
-    </AppWrapper>
+                <Route exact path={'/authenticate'}>
+                  {shouldAuthenticate ? <OAuth /> : <Redirect to={'/'} />}
+                </Route>
+                <Route path={'/auth-token/:token'}>
+                  <StoreToken />
+                </Route>
+                <Route exact path={'/join'}>
+                  <Join />
+                </Route>
+                {shouldAuthenticate ? (
+                  <PrivateRoute
+                    path={'/create'}
+                    failureRedirectTo={'/authenticate'}>
+                    <Create />
+                  </PrivateRoute>
+                ) : (
+                  <Route path={'/create'}>
+                    <Create />
+                  </Route>
+                )}
+                <Route path={'/:phrase'}>
+                  <VideoCall />
+                </Route>
+              </Switch>
+            </ShareLinkProvider>
+          </MeetingInfoProvider>
+        </SetMeetingInfoProvider>
+      </AppWrapper>
+    </PollProvider>
   );
 };
 

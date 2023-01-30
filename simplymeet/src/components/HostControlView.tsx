@@ -9,11 +9,13 @@
  information visit https://appbuilder.agora.io. 
 *********************************************
 */
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import SecondaryButton from '../atoms/SecondaryButton';
-import {useString} from '../utils/useString';
+import TextInput from '../atoms/TextInput';
 import useRemoteMute, {MUTE_REMOTE_TYPE} from '../utils/useRemoteMute';
+import {PollContext} from './PollContext';
+import PrimaryButton from '../atoms/PrimaryButton';
 
 export interface MuteAllAudioButtonProps {
   render?: (onPress: () => void) => JSX.Element;
@@ -55,6 +57,15 @@ const HostControlView = () => {
   //commented for v1 release
   //const hostControlsLabel = useString('hostControlsLabel')();
   const hostControlsLabel = 'Host Controls';
+  const {
+    question,
+    setQuestion,
+    answers,
+    setAnswers,
+    isModalOpen,
+    setIsModalOpen,
+  } = useContext(PollContext);
+
   return (
     <>
       <Text style={style.heading}>{hostControlsLabel}</Text>
@@ -67,6 +78,41 @@ const HostControlView = () => {
             <MuteAllVideoButton />
           </View>
         )}
+
+        <Text style={style.heading_sub}>Create a Poll</Text>
+        <View>
+          <TextInput
+            style={style.textInput}
+            value={question}
+            onChangeText={setQuestion}
+            placeholder="Poll Question"
+          />
+          <br />
+          {answers.map((answer, index) => (
+            <div key={index}>
+              <br />
+              <TextInput
+                value={answer.option}
+                placeholder={`Poll Answer ${index + 1}`}
+                onChangeText={(value) =>
+                  setAnswers([
+                    ...answers.slice(0, index),
+                    {option: value, votes: 0},
+                    ...answers.slice(index + 1),
+                  ])
+                }
+              />
+            </div>
+          ))}
+        </View>
+        <View style={style.btnContainer}>
+          <PrimaryButton
+            onPress={() => {
+              setIsModalOpen(true);
+            }}
+            text="Start Poll"
+          />
+        </View>
       </View>
     </>
   );
@@ -79,6 +125,17 @@ const style = StyleSheet.create({
     color: $config.PRIMARY_FONT_COLOR,
     // marginBottom: 20,
     alignSelf: 'center',
+  },
+  heading_sub: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: $config.PRIMARY_FONT_COLOR,
+    marginBottom: 15,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  textInput: {
+    marginBottom: 20,
   },
   btnContainer: {
     alignItems: 'center',
