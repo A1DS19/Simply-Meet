@@ -213,6 +213,12 @@ const Create = () => {
                       onPress={() => history.push('/join')}
                       text={haveMeetingID}
                     />
+
+                    <HorizontalRule />
+                    <SecondaryButton
+                      onPress={() => history.push('/about')}
+                      text={'About this platform'}
+                    />
                   </View>
                 </View>
               </View>

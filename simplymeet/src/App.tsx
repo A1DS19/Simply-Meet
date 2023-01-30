@@ -32,6 +32,7 @@ import {
 import {SetMeetingInfoProvider} from './components/meeting-info/useSetMeetingInfo';
 import {ShareLinkProvider} from './components/useShareLink';
 import PollProvider from './components/PollContext';
+import About from './pages/About';
 
 //hook can't be used in the outside react function calls. so directly checking the platform.
 if (Platform.OS === 'ios') {
@@ -108,6 +109,9 @@ const App: React.FC = () => {
                 </Route>
                 <Route exact path={'/join'}>
                   <Join />
+                </Route>
+                <Route exact path={'/about'}>
+                  <About />
                 </Route>
                 {shouldAuthenticate ? (
                   <PrivateRoute
